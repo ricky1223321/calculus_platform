@@ -8,9 +8,11 @@ mgf = function(stringFormula, from=NULL, to=NULL)
 dif = function(stringFormula){
   return(D(parse(text=stringFormula),"x"))
 }
+ddif = function(stringFormula){
+  return(D(D(parse(text=stringFormula),"x"),"x"))
+}
 
-integration = function(stringFormula, from=NULL, to=NULL){
+adif = function(stringFormula,from=NULL,to=NULL){
   f = function(x) eval(parse(text=stringFormula))
-  ans = integrate(f, lower=from, upper=to)[[1]]
-  return(ans)
+  return(integrate(f,from,to))
 }

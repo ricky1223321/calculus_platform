@@ -209,6 +209,8 @@ dif = function(stringFormula){
   g = expression(f,'x')
   return(D(g,'x'))
 }
+dif("")
+dif(dif("x^3"))
 
 
 f = function(x) D(parse(text=x), "x")
@@ -221,7 +223,46 @@ y1
 mgf = function(stringFormula, from=NULL, to=NULL)
 {
   f = function(x) eval(parse(text=stringFormula))
-  ans = integrate(f, lower=from, upper=to)[[1]]
-  return(ans)
+  g = makeFun(f(x) ~ x)
+  plotFun(g(x=x)~x, x.lim=range(from,to))
 }
-mgf("x^2",0,10)
+dif = function(stringFormula){
+  return(D(parse(text=stringFormula),"x"))
+}
+require(mosaic)
+p = mgf("3 * x^2",-10,10)
+g = expression(x^3,'x')
+x1 = D(g,'x')
+summary(x1)
+y1 = deparse(x1)
+typeof(y1)
+
+p = mgf("8",0,10)
+p
+
+library(ggplot2)
+library(gapminder)
+library(magrittr)
+
+ggplot(gapminder, aes(x = continent, y = gdpPercap)) + geom_boxplot()
+
+
+
+adif = function(stringFormula,from=NULL,to=NULL){
+  f = function(x) eval(parse(text=stringFormula))
+  return(integrate(f,from,to))
+}
+adif("x^3",0,10)
+library(mosaicCalc)
+y = antiD(x^2 ~ x)
+mgf = function(stringFormula, from=NULL, to=NULL)
+{
+  f = antiD(x^2 ~ x)
+  g = makeFun(f(x) ~ x)
+  plotFun(g(x=x)~x, x.lim=range(from,to))
+}
+mgf()
+
+f = antiD(x^2 ~ x)
+g = makeFun(f(x) ~ x)
+plotFun(g(x=x)~x, x.lim=range(-10,10))
